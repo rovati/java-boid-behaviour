@@ -83,6 +83,10 @@ public class Direction {
         return Math.sqrt(x*x + y*y);
     }
 
+    public Direction projectOn(Direction other){
+        return other.scaleBy(this.dot(other) / other.norm());
+    }
+
     @Override
     public String toString(){
         return "(" + x + "," + y + ")";

@@ -67,7 +67,11 @@ public class Boid {
             double distance = distanceVector.norm();
             double scaleFactor = (Constants.MAX_DISTANCE_DETECTION - distance)
                 / Constants.MAX_DISTANCE_DETECTION;
-            correction.add(distanceVector.scaleBy(-scaleFactor));
+            // correction.add(distanceVector.scaleBy(-scaleFactor));
+
+            Direction normalProj = distanceVector.projectOn(dir);
+            normalProj.sub(distanceVector);
+            correction.add(normalProj.scaleBy(scaleFactor));
 
             /* flock direcion */
             flockDirection.add(otherB.dir);
@@ -78,9 +82,9 @@ public class Boid {
         Direction dirToCenter = flockCenter.scaleBy(closeBoids.size());
         dirToCenter.sub(new Direction(dir.x, dir.y));
 
-        dir.add(dirToCenter.scaleBy(0.01));
-        //dir.add(correction.scaleBy(0.0001));
-        //dir.add(flockDirection.scaleBy(0.001));
+        // dir.add(dirToCenter.scaleBy(0.01));
+        dir.add(correction.scaleBy(0.01));
+        // dir.add(flockDirection.scaleBy(0.001));
         dir.normalize();
         updateAngle();
     }
