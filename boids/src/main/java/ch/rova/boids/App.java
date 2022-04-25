@@ -14,18 +14,16 @@ import ch.rova.boids.ui_elems.Flock2D;
  */
 public class App extends Application {
 
-    private static final double SCENE_WIDTH = 500;
-    private static final double SCENE_HEIGHT = 500;
-
     private Scene scene;
     private AnimationTimer loop;
     private Flock2D flock;
 
     @Override
     public void start(Stage stage) throws IOException {
-        flock = new Flock2D(30);
+        flock = new Flock2D(Constants.NB_BOIDS);
 
-        scene = new Scene(flock, SCENE_WIDTH, SCENE_HEIGHT);
+        scene = new Scene(flock,
+            Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
 
         stage.setTitle("Boids test");
         stage.setScene(scene);
@@ -36,7 +34,8 @@ public class App extends Application {
     }
 
     private void runSimulation(){
-        flock.setCanvasSize(SCENE_WIDTH, SCENE_HEIGHT);
+        flock.setCanvasSize(
+            Constants.SCENE_WIDTH, Constants.SCENE_HEIGHT);
         loop = new AnimationTimer() {
 
             @Override

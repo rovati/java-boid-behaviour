@@ -2,7 +2,6 @@ package ch.rova.boids.ui_elems;
 
 import ch.rova.boids.model.Boid;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;

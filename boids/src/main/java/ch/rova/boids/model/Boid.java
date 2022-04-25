@@ -2,10 +2,9 @@ package ch.rova.boids.model;
 
 import java.util.List;
 
-public class Boid {
+import ch.rova.boids.Constants;
 
-    public static final double MAX_CANVAS_SIZE = 500;
-    public static final double MAX_COLLISION_DIST = 10;
+public class Boid {
 
     public Direction dir;
     public Position pos;
@@ -18,9 +17,9 @@ public class Boid {
 
     public Boid(){
         dir = Direction.random();
-        pos = Position.random(MAX_CANVAS_SIZE,MAX_CANVAS_SIZE);
-        max_width = MAX_CANVAS_SIZE;
-        max_height = MAX_CANVAS_SIZE;
+        pos = Position.random(Constants.SCENE_WIDTH,Constants.SCENE_WIDTH);
+        max_width = Constants.SCENE_WIDTH;
+        max_height = Constants.SCENE_WIDTH;
         updateAngle();
         colliding = false;
     }
@@ -57,17 +56,33 @@ public class Boid {
      * @param closeBoids list of the boids in proximity of this
      */
     public void updateDirection(List<Boid> closeBoids){
-        /* collision avoidance */
-        colliding = false;
-        // check whether collision happens in front of boids
+        colliding = closeBoids.size() != 0;
+        Direction correction = new Direction(0,0);
+        Direction flockDirection = new Direction(0,0);
+        Direction flockCenter = new Direction(dir.x, dir.y);
+
         for (Boid otherB : closeBoids){
-            if (isCollidingWith(otherB)){
-                // calibrate direction
-                dir.addAndNormalize(otherB.dir.scaleBy(0.001));
-                updateAngle();
-                colliding = true;
-            }
+            /* collision avoidance */
+            Direction distanceVector = Direction.fromPositions(otherB.pos, pos);
+            double distance = distanceVector.norm();
+            double scaleFactor = (Constants.MAX_DISTANCE_DETECTION - distance)
+                / Constants.MAX_DISTANCE_DETECTION;
+            correction.add(distanceVector.scaleBy(-scaleFactor));
+
+            /* flock direcion */
+            flockDirection.add(otherB.dir);
+
+            /* flock center */
+            flockCenter.add(new Direction(otherB.pos.x, otherB.pos.y));
         }
+        Direction dirToCenter = flockCenter.scaleBy(closeBoids.size());
+        dirToCenter.sub(new Direction(dir.x, dir.y));
+
+        dir.add(dirToCenter.scaleBy(0.01));
+        //dir.add(correction.scaleBy(0.0001));
+        //dir.add(flockDirection.scaleBy(0.001));
+        dir.normalize();
+        updateAngle();
     }
 
     public boolean isColliding() { return colliding; }
@@ -84,12 +99,6 @@ public class Boid {
 
     private void updateAngle(){
         angle = Math.atan2(dir.y, dir.x) / Math.PI * 180 - 90;
-    }
-
-    private boolean isCollidingWith(Boid otherB){
-        double t1 = (otherB.pos.x - this.pos.x) / (dir.x - otherB.dir.x);
-        double t2 = (otherB.pos.y - this.pos.y) / (dir.y - otherB.dir.y);
-        return  t1 > 0 && Math.abs(t1-t2) < 100;
     }
 
 }

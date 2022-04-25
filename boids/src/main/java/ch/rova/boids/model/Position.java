@@ -31,5 +31,10 @@ public class Position {
         this.x += d.x;
         this.y += d.y;
     }
+
+    @Override
+    public String toString(){
+        return "(" + x + "," + y + ")";
+    }
     
 }

@@ -10,7 +10,6 @@ public class Direction {
     public Direction(double x, double y){
         this.x = x;
         this.y = y;
-        normalize();
     }
 
     public static Direction random(){
@@ -29,9 +28,17 @@ public class Direction {
     }
 
     public void normalize(){
-        double norm = Math.sqrt(x*x + y*y);
-        x = x / norm;
-        y = y / norm;
+        if (x == 0 || y == 0){
+            if (!(x == 0 && y == 0))
+                if (x == 0)
+                    y = 1;
+                else
+                    x = 1;
+        } else {   
+            double norm = Math.sqrt(x*x + y*y);
+            x = x / norm;
+            y = y / norm;
+        }
     }
 
     public void reset(){
@@ -49,6 +56,11 @@ public class Direction {
         y = y + other.y;
     }
 
+    public void sub(Direction other){
+        x = x - other.x;
+        y = y - other.y;
+    }
+
     public void addAndNormalize(Direction other){
         add(other);
         normalize();
@@ -58,8 +70,17 @@ public class Direction {
         return new Direction(x*s, y*s);
     }
 
+    public Direction mirrorOver(Direction other){
+        double t = -2 * (x*other.x + y*other.y) / (x *x + y*y);
+        return new Direction(t * x + other.x, t * y + other.y);
+    }
+
     public double dot(Direction other){
         return this.x * other.x + this.y * other.y;
+    }
+
+    public double norm(){
+        return Math.sqrt(x*x + y*y);
     }
 
     @Override
