@@ -29,6 +29,7 @@ public class Flock2D extends Pane {
     }
 
     public void update(){
+        flock.updateBoidsDirections();
         flock.updateBoidsPositions();
         boidsShapes.forEach(BoidUI::draw);
     }

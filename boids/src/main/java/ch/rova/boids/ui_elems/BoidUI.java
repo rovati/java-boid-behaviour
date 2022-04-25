@@ -2,6 +2,7 @@ package ch.rova.boids.ui_elems;
 
 import ch.rova.boids.model.Boid;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -9,7 +10,8 @@ import javafx.scene.transform.Translate;
 public class BoidUI extends Polygon {
 
     private Boid boid;
-    private Color color = Color.AQUAMARINE;
+    private Color normalColor = Color.AQUAMARINE;
+    private Color collisionColor = Color.RED;
     private Translate translation;
     private Rotate orientation;
 
@@ -19,9 +21,9 @@ public class BoidUI extends Polygon {
         getPoints().addAll(new Double[]{        
             0.0, 10.0, 
             5.0, -10.0, 
-            -5.0, -10.0,           
+            -5.0, -10.0,  
             });
-        setFill(color);
+        setFill(normalColor);
         orientation = new Rotate(this.boid.angle);
         translation = new Translate();
         getTransforms().addAll(translation, orientation);
@@ -42,6 +44,10 @@ public class BoidUI extends Polygon {
         translation.setX(boid.pos.x);
         translation.setY(boid.pos.y);
         orientation.setAngle(boid.angle);
+        if (boid.isColliding())
+            setFill(collisionColor);
+        else
+            setFill(normalColor);
     }
     
 }

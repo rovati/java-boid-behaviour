@@ -14,8 +14,8 @@ import ch.rova.boids.ui_elems.Flock2D;
  */
 public class App extends Application {
 
-    private static final double SCENE_WIDTH = 1200;
-    private static final double SCENE_HEIGHT = 800;
+    private static final double SCENE_WIDTH = 500;
+    private static final double SCENE_HEIGHT = 500;
 
     private Scene scene;
     private AnimationTimer loop;
@@ -23,7 +23,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        flock = new Flock2D(5);
+        flock = new Flock2D(30);
 
         scene = new Scene(flock, SCENE_WIDTH, SCENE_HEIGHT);
 
