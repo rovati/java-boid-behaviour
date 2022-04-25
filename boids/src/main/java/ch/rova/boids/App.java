@@ -1,35 +1,52 @@
 package ch.rova.boids;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import ch.rova.boids.ui_elems.Flock2D;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
 
-    private static Scene scene;
+    private static final double SCENE_WIDTH = 500;
+    private static final double SCENE_HEIGHT = 500;
+
+    private Scene scene;
+    private AnimationTimer loop;
+    private Flock2D flock;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        flock = new Flock2D(5);
+
+        scene = new Scene(flock, SCENE_WIDTH, SCENE_HEIGHT);
+
+        stage.setTitle("Boids test");
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
+
+        runSimulation();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    private void runSimulation(){
+        loop = new AnimationTimer() {
+
+            @Override
+            public void handle(long now) {
+                flock.update();
+            }
+        };
+
+        loop.start();
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
 
     public static void main(String[] args) {
         launch();
