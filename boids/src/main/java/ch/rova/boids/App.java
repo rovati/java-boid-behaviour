@@ -14,8 +14,8 @@ import ch.rova.boids.ui_elems.Flock2D;
  */
 public class App extends Application {
 
-    private static final double SCENE_WIDTH = 500;
-    private static final double SCENE_HEIGHT = 500;
+    private static final double SCENE_WIDTH = 1200;
+    private static final double SCENE_HEIGHT = 800;
 
     private Scene scene;
     private AnimationTimer loop;
@@ -36,6 +36,7 @@ public class App extends Application {
     }
 
     private void runSimulation(){
+        flock.setCanvasSize(SCENE_WIDTH, SCENE_HEIGHT);
         loop = new AnimationTimer() {
 
             @Override

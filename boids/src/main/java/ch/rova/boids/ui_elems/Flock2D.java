@@ -22,6 +22,12 @@ public class Flock2D extends Pane {
         this.getChildren().addAll(boidsShapes);
     }
 
+    public void setCanvasSize(double width, double height){
+        for (BoidUI bui : boidsShapes){
+            bui.setBounds(width, height);
+        }
+    }
+
     public void update(){
         flock.updateBoidsPositions();
         boidsShapes.forEach(BoidUI::draw);
